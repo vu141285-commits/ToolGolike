@@ -15,7 +15,13 @@ from rich.text import Text
 import sys
 import requests
 
-sys.stdout.reconfigure(encoding='utf-8')
+try:
+    sys.stdout.reconfigure(encoding='utf-8')
+except AttributeError:
+    # Nếu môi trường (như IDLE) không hỗ trợ reconfigure, ép kiểu mã hóa bằng cách gán trực tiếp hoặc bỏ qua
+    import codecs
+    if hasattr(sys.stdout, 'buffer'):
+        sys.stdout = codecs.getwriter("utf-8")(sys.stdout.buffer)
 import threading, time, random, json, os, re
 console = Console(force_terminal=True)
 import types
